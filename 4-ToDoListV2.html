@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>ToDoList VUE 组件化</title>
+        <script src="./vue.js"></script>
+    </head>
+    <body>
+        <!-- View 试图层 -->
+        <!-- 视图层使用ViewModel层提供方法，无需自己实现具体逻辑控制由Vue实现 -->
+        <div id="app">
+            <!-- 模板指令 v-model 数据双向绑定 -->
+            <input type="text" v-model="inputValue"/>
+            <!-- 绑定事件 模板标签v-on使用 v-on:动作=事件名称 -->
+            <button v-on:click="handleBtnClick">提交</button>
+            <ul>
+                <!-- 标签指令 v-for 的使用 循环变量名为list数据 item是循环种的变量 -->
+                <!-- <li v-for="item in list">{{item}}</li>  -->
+
+                <!-- 使用自己定义的组件 -->
+                <!-- <todo-item v-bind:content="item" 
+                           v-for="item in list">
+                </todo-item> -->
+                <todo-item-v2 v-bind:content="item" 
+                           v-for="item in list">
+                </todo-item-v2>
+            </ul>
+        </div>
+
+        <script>
+
+            // Vue全局组件创建方法
+            Vue.component('TodoItem', {
+                // 从父组件接收参数
+                props: ['content'],
+                // 模板
+                template: "<li>{{content}}</li>"
+            })
+
+            // Vue局部组件创建方法
+            var TodoItemV2 = {
+                // 从父组件接收参数
+                props: ['content'],
+                // 模板
+                template: "<li>{{content}}</li>"
+            }
+
+            // Model 数据层
+            var app = new Vue({
+                el: '#app',
+                // 注册局部组件
+                components: {
+                    TodoItemV2: TodoItemV2
+                },
+                data: {
+                    list: [],
+                    inputValue: ''
+                },
+                methods: {
+                    handleBtnClick: function() {
+                        this.list.push(this.inputValue)
+                        this.inputValue = ''
+                    }        
+                }
+            })
+        </script>
+    </body>
+</html>

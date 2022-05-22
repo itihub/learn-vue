@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Vue 中的条件渲染</title>
+        <script src="./vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <!-- 条件渲染 -->
+            <div v-if="show">{{message}}</div>
+            <!-- v-show 是由css控制是否展示 性能更好 -->
+            <div v-show="show">{{message}}</div>
+
+            <div v-if="show">{{message}}</div>
+            <div v-else>Bye World</div>
+
+            <div v-if="showV2 === 'a'">This is A</div>
+            <div v-else-if="showV2 === 'b'">This is B</div>
+            <div v-else>This is others</div>
+
+            <!-- 当给元素标签加入key值时，vue知道它是面向唯一的一个元素，如果两个key不同vue就不会尝试复用以前的标签 -->
+            <div v-if="display">
+                用户名：<input key="username"/>
+            </div>
+            <div v-else>
+                邮箱名：<input key="password"/>
+            </div>
+        </div>
+
+        <script>
+            var vm = new Vue({
+                el: '#app',
+                data: {
+                    show: false,
+                    showV2: "a",
+                    display: false,
+                    message: "Hello World"
+                }
+            })
+        </script>
+    </body>
+</html>

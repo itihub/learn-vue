@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Hello Word</title>
+        <script src="./vue.js"></script>
+    </head>
+    <body>
+        
+        <div id="app">{{content}}</div>
+
+        <script>
+            // 给app元素赋值
+
+            // 原生JS写法
+            // var dom = document.getElementById('app')
+            // dom.innerHTML = 'Hello World'
+
+            // 需求每个2秒钟替换app的内容 原生JS写法
+            // setTimeout(function() {
+            //     dom.innerHTML = 'bye world'
+            // }, 2000)
+
+            // vue写法 创建Vue实例
+            var app = new Vue({
+                el: '#app',
+                data: {
+                    content: 'Hello World'
+                }
+            })
+
+            // 需求每个2秒钟替换app的内容 VUE写法
+            setTimeout(function() {
+                app.$data.content = 'bye world'
+            }, 2000)
+
+            
+        </script>
+    </body>
+</html>

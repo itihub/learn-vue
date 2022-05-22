@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Vue计算属性、方法和监听器</title>
+        <script src="./vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <!-- 插值表达式变量拼接 （不推荐 存在逻辑） -->
+            {{firstName + " " + lastName}}
+            <br/>
+            <!-- 推荐写法 使用计算属性把逻辑放在数据层而不是view层 -->
+            {{fullName}}
+            <br/>
+            {{age}}
+            <br/>
+            <!-- 插值表达式方法调用 不推荐 建议使用计算属性性能更好 -->
+            {{fullNameMethod()}}
+            <br/>
+            <!-- 使用侦听器实现fullName展示 -->
+            {{fullNameField}}
+            <!-- 
+                总结：
+                    computed计算属性和watch侦听器 都具备缓存机制 
+                    watch侦听器实现代码量更大更复杂
+                    如果一个功能既能使用computed实现也能使用watch实现 推荐使用computed
+             -->
+        </div>
+
+        <script>
+            var vm = new Vue({
+                el: '#app',
+                data: {
+                    firstName: "Dell",
+                    lastName: "Lee",
+                    fullNameField: "Dell Lee", // 冗余字段（侦听器实现所需）
+                    age: 28
+                },
+                // 计算属性 有缓存机制，只会在页面初次加载计算一次，如果引用变量发生改变才会再次计算
+                computed: {
+                    // 定义方法
+                    fullName: function() {
+                        console.log("计算了一次");
+                        return this.firstName + " " + this.lastName
+                    }
+                },
+                // 方法
+                methods: {
+                    // 使用方法定义代替计算属性 无缓存机制，页面只要重新渲染就会执行一次
+                    fullNameMethod: function() {
+                        console.log("方法计算了一次");
+                        return this.firstName + " " + this.lastName
+                    }
+                },
+                // 侦听器
+                watch: {
+                    // 侦听firstName字段的改变
+                    firstName: function() {
+                        console.log("firstName字段发生改变");
+                        this.fullNameField = this.firstName + " " + this.lastName
+                    },
+                    lastName: function() {
+                        console.log("lastName字段发生改变");
+                        this.fullNameField = this.firstName + " " + this.lastName
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

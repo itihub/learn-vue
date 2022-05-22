@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Vue 组件使用中的细节点</title>
+        <script src="./vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <table>
+                <!-- 
+                    使用is属性解决模板标签出现bug的情况
+                    html 约束tbody标签只允许写入tr标签，导致使用自定义组件不会现实tbody内
+                    解决方式：使用is来指定组件名，这样既可以使用自定义组件又符合H5编码规范
+                 -->
+                <tbody>
+                    <tr is="row"></tr>
+                    <tr is="row"></tr>
+                    <tr is="row"></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="root">
+            <div ref='hello' 
+                 @click="handleClick">
+                 hello world
+            </div>
+
+            <hr/>
+
+            <!-- 自定义组件 监听change事件 以及ref使用 -->
+            <counter ref="counter1" @change="handleChange"></counter>
+            <counter ref="counter2" @change="handleChange"></counter>
+            <!-- 对两个计数器求和 -->
+            <div>
+                {{total}}
+            </div>
+        </div>
+
+        <script>
+            // 全局组件
+            Vue.component('row', {
+                // 子组件定义data时 必须是一个函数而不能是一个对象，之所以这么设计是一个子组件不向根组件只会调用一次
+                data: function() {
+                    return {
+                        content: 'this is a row'
+                    }
+                },
+                template: '<tr><td>{{content}}</td></tr>'
+            })
+            var vm = new Vue({
+                el: '#app',
+
+            })
+
+
+            // 自定义计数器组件
+            Vue.component('counter', {
+                template: '<div @click="handleCounterClick">{{number}}</div>',
+                data: function() {
+                    return {
+                        number: 0
+                    }
+                },
+                methods: {
+                    handleCounterClick: function() {
+                        this.number ++
+                        // 发布事件
+                        this.$emit('change')
+                    },
+                }
+            })
+            // vue中通过ref(引用)操作DOM
+            // vue中如果定义组件 通过ref获取的组件的引用
+            var vm2 = new Vue({
+                el: '#root',
+                data: {
+                    total: 0
+                },
+                methods: {
+                    handleClick: function() {
+                        // this.$refs 值的是vue中所有的引用
+                        console.log(this.$refs.hello)
+                        console.log(this.$refs.hello.innerHTML)
+                    },
+                    handleChange: function() {
+                        console.log(this.$refs.counter1)
+                        console.log(this.$refs.counter2)
+                        // 获取子组件的值求和赋值给total
+                        this.total = this.$refs.counter1.number + this.$refs.counter2.number
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

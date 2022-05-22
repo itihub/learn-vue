@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Vue实例</title>
+        <script src="./vue.js"></script>
+    </head>
+    <body>
+        <div id="root">
+            <!-- 
+                点击事件绑定到handleClick方法
+                v-on: 缩写 @
+                    v-on:click == @click
+             -->
+            <div v-on:click="handleClick">
+                <!-- 插值表达 取VUE实例下data里的数据 -->
+                {{message}}
+            </div>
+            <item></item>
+        </div>
+        <script>
+
+            // 定义全局组件 （组件背后原理其实也是Vue实例）
+            Vue.component('item', {
+                template: '<div>hello item</div>'
+            })
+
+            // 通过new关键字创建VUE实例
+            var app =  new Vue({
+                // 接管DOM的显示
+                el: '#root',
+                // 数据存放
+                data: {
+                    message: 'hello world'
+                },
+                // 方法定义
+                methods: {
+                    // 处理点击事件的自定义方法
+                    handleClick: function() {
+                        alert("hello")
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

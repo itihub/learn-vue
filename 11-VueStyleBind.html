@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Vue中的样式绑定</title>
+        <script src="./vue.js"></script>
+        <!-- 定义样式 -->
+        <style>
+            .activated {
+                color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- 
+            点击一次变成红色
+            再点击一次恢复
+        -->
+        <div id="app">
+            <!--
+                class对象绑定语法
+                :class="{activated: isActivated}"
+                定义一个样式名称为activated
+                样式的显示取决于isActivated变量
+            -->
+            <div 
+                @click="handleDivClick"
+                :class="{activated: isActivated}"
+            >
+                hell world
+            </div>
+
+            <!--
+                class变量绑定语法
+                动态的向DOM元素添加或删除不同的样式，从而实现页面效果的变更
+            -->
+            <div 
+                @click="handleDivClick"
+                :class="[activatedField, activatedFieldOne]"
+            >
+                hell world
+            </div>
+
+             <!-- 使用内联样式 class对象绑定语法实现样式变化 -->
+            <div :style="styleObj" @click="handleDivClickByStyle">
+                你好，世界
+            </div>
+
+            <!-- 使用内联样式 class数组绑定语法实现样式变化 -->
+            <div :style="[styleObj, {fontSize: '20px'}]" @click="handleDivClickByStyle">
+                你好，世界
+            </div>
+        </div>
+
+        <script>
+            var vm = new Vue({
+                el: '#app',
+                data: {
+                    isActivated: false,
+                    activatedField: "",
+                    activatedFieldOne: "activatedField-one",
+                    styleObj: {
+                        color: "black"
+                    }
+                },
+                methods: {
+                    handleDivClick: function() {
+                        this.isActivated = !this.isActivated
+                        if(this.activatedField === "activated") {
+                            this.activatedField = ""
+                        }else{
+                            // 赋值样式名称
+                            this.activatedField = "activated"
+                        }
+                    },
+                    handleDivClickByStyle: function() {
+                        if(this.styleObj.color === 'black') {
+                            this.styleObj.color = 'red'
+                        }else{
+                            this.styleObj.color = 'black'
+                        }
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

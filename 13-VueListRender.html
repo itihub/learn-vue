@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Vue 列表渲染</title>
+        <script src="./vue.js"></script>
+    </head>
+    <body>
+        <!-- 
+            不能通过下标的方式来改变数组 vm.list[4] = {id:7,text:"test"}，这样这可以改变数据但页面不会发生变化
+            vue提供的数组变异方法
+            pop 把数组最后一项删除掉
+            push 往数组里增加一条
+            shift 把数据第一项删除掉
+            unshift 把数据第一项加一点内容
+            spilce 数据的截取
+            sort 对数组进行排序
+            reverse 对数组取反
+            
+            通过改变引用来改变页面的数据
+            vm.list = [{id:7,text:"test"}]
+
+            通过set方法来改变页面的数据
+            Vue.set(vm.list, 1, {id:2,text:"test2"})
+            vm.$set(vm.list, 1, {id:2,text:"test2"})
+
+         -->
+        <div id="app">
+            
+            <div v-for="(item, index) of list" 
+                 :key="item.id">
+                 <div>
+                    {{item.text}} --- {{index}}
+                 </div>
+            </div>
+
+            <hr/>
+
+            <!-- 使用模板占位符 template 不会渲染到页面上 -->
+            <template v-for="(item, index) of list" 
+                 :key="item.id">
+                 <div>
+                    {{item.text}} --- {{index}}
+                 </div>
+                 <span>{{item.text}}</span>
+            </template>
+
+            <hr/>
+
+            <!-- 
+                对象循环
+                向对象添加新的属性，通过修改引用方式进行修改页面才会发生变化
+                或者 使用set方法页面也会发生变化
+                    Vue.set(vm.userInfo, "address", "beijing")
+                    vm.$set(vm.userInfo, "address", "shanghai")
+             -->
+            <div v-for="(item, key, index) of userInfo">
+                {{item}} --- {{key}} --- {{index}}
+            </div>
+        </div>
+
+        <script>
+            var vm = new Vue({
+                el: '#app',
+                data: {
+                    list: [
+                        {
+                            id: 1,
+                            text: "hello"
+                        },
+                        {
+                            id: 2,
+                            text: "dell"
+                        },
+                        {
+                            id: 3,
+                            text: "nice"
+                        },
+                        {
+                            id: 4,
+                            text: "to"
+                        },
+                        {
+                            id: 5,
+                            text: "meet"
+                        },
+                        {
+                            id: 6,
+                            text: "you"
+                        }
+                    ],
+                    userInfo: {
+                        name: "Dell",
+                        age: 28,
+                        febder: "male",
+                        salary: "secret"
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

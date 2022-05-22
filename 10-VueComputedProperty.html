@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Vue计算属性 getter 和 setter 方法</title>
+        <script src="./vue.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            <!-- 插值表达 如果是对象执行get方法 -->
+            {{fullName}}
+        </div>
+
+        <script>
+            var vm = new Vue({
+                el: '#app',
+                data: {
+                    firstName: "Dell",
+                    lastName: "Lee"
+                },
+                computed: {
+                    // 定义成对象
+                    fullName: {
+                        get: function() {
+                            return this.firstName + " " + this.lastName
+                        },
+                        set: function(value) {
+                            var arr = value.split(" ");
+                            this.firstName = arr[0];
+                            this.lastName = arr[1];
+                            console.log(value);
+                        }
+                    }
+                }
+            })
+        </script>
+    </body> 
+</html>

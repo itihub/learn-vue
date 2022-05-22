@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Vue实例生命周期</title>
+        <script src="./vue.js"></script>
+    </head>
+    <body>
+        <!-- <div id="app">hello world</div> -->
+        <div id="app"></div>
+
+        <script>
+            // 生命周期函数就是Vue实例在某一个时间点会自动执行的函数
+            var vm = new Vue({
+                // vue实例第一阶段初始化后就会自动执行beforeCreate生命周期函数
+                beforeCreate: function() {
+                    console.log("beforeCreate");
+                },
+                // vue实例第二阶段初始化后就会自动执行beforeCreate生命周期函数
+                created: function() {
+                    console.log("created");
+                },
+                el: '#app',
+                // 如果没有tempalet模板属性 则会使用el指定的DOM作为模板
+                template: '<div>{{test}}</div>',
+                data: {
+                    test: 'hello word'
+                },
+                // 渲染模板之前会自动执行beforeMount生命周期函数
+                beforeMount: function() {
+                    console.log("beforeMount");
+                    console.log(this.$el);
+                },
+                // 页面挂载之后会自动执行mounted生命周期函数
+                mounted: function() {
+                    console.log("mounted");
+                    console.log(this.$el);
+                },
+                // vue实例销毁之前会自动执行beforeDestroy生命周期函数
+                beforeDestroy: function() {
+                    console.log("beforeDestroy");
+                },
+                // vue实例销毁之后会自动执行destroyed生命周期函数
+                destroyed: function() {
+                    console.log("destroyed");
+                },
+                // 以下方法观察，在浏览器控制台改变vm.test数据 vm.test = "dell"
+                // 钩子方法 数据发生改变还未重新渲染之前会自动执行beforeUpdate生命周期函数
+                beforeUpdate: function() {
+                    console.log("beforeUpdate");
+                },
+                // 钩子方法 数据发生改变还未重新渲染之后会自动执行updated生命周期函数
+                updated: function() {
+                    console.log("updated");
+                }
+            })
+        </script>
+    </body>
+</html>
