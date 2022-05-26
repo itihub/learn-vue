@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Vue 中同时使用过度和动画</title>
+        <script src="./vue.js"></script>
+
+        <!-- 引入animate.css -->
+        <link rel="stylesheet" type="text/css" href="./animate.css">
+
+        <style>
+            .fade-enter {
+                opacity: 0;
+            }
+            .fade-leave-to {
+                opacity: 0;
+            }
+            .fade-enter-active,
+            .fade-leave-active {
+                transition: opacity 1s;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div id="root">
+            <!-- 
+                animate库提供的是@keyframes的c3的动画效果
+                同样的c3还有transition过度效果
+
+                    使用animate.css 
+                    https://animate.style/
+                    使用自定义样式名来指定使用animate css
+                    animate 的使用方法 animate__animated 动画名称
+
+                    解决首次显示没有动画效果
+                    增加appear-active-class 
+                    让appear-active-class生效 需要在name后加appear
+
+                    同时使用animate库提供的是@keyframes动画和transition过度效果 
+
+                    当animate库提供的是@keyframes动画和transition过度效果持续时间不同时
+                    可以手动指定以哪个动画为准 type="transition"
+                    或者手动指定动画时间时长  :duration="10000"
+                    设置更复杂的动画持续时长 显示和隐藏的持续时长
+                    :duration="{enter: 5000, leave: 10000}"
+                -->
+            <transition 
+                type="transition"
+                :duration="5000"
+                name="fade"
+                appear
+                enter-active-class="animate__animated animate__wobble fade-enter-active"
+                leave-active-class="animate__animated animate__backOutRight fade-leave-active"
+                appear-active-class="animate__animated animate__wobble"
+                >
+                <div v-if="show">hello world</div>
+            </transition>
+            <button @click="handleClick">切换</button>
+        </div>
+
+        <script>
+            var vm = new Vue({
+                el: '#root',
+                data: {
+                    show: true
+                },
+                methods: {
+                    handleClick: function() {
+                        this.show = !this.show
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>
