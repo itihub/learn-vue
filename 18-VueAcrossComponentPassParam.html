@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Vue 非父子组件间的传值(Bus/总线/发布订阅模式/观察者模式)</title>
+        <script src="./vue.js"></script>
+    </head>
+    <body>
+
+        <!-- 
+            非父子组件间的传值 解决方法
+            1. 通过VueX解决 （有点难度）
+            2. 发布订阅模式解决（总线机制）（本次展示）
+         -->
+        <div id="root">
+
+            <!-- 
+                组件root和child1、child2 是父子组件关系
+                组件child1和child2 是兄弟组件关系
+             -->
+            <child id="child1" content="Dell"></child>
+            <child id="child2" content="Lee"></child>
+        </div>
+
+        <script>
+
+            // 在Vue对象挂了bus的属性 当前script内只要new Vue实例都会有bus属性
+            Vue.prototype.bus = new Vue()
+
+            Vue.component('child', {
+                props: {
+                    content: String
+                },
+                data: function() {
+                    return {
+                        selfContent: this.content
+                    }
+                },
+                template: '<div @click="handleClick">{{selfContent}}</div>',
+                methods: {
+                    handleClick: function() {
+                        alert("handleClick:" + this.selfContent)
+                        // 通过bus总线向外触发事件
+                        this.bus.$emit('change', this.content)
+                    }
+                },
+                mounted: function() {
+                    var this_ = this
+                    // 监听change事件
+                    this.bus.$on('change', function(msg) {
+                        alert("mounted:" + msg)
+                        this_.selfContent = msg
+                    })
+                }
+            })
+
+            var vm = new Vue({
+                el: '#root'
+            })
+        </script>
+    </body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Vue 组件绑定原生事件</title>
+        <script src="./vue.js"></script>
+    </head>
+    <body>
+
+        <div id='root'>
+            <!-- 
+                给自定义组件绑定事件时，这个事件是自定义事件 
+                    父组件处理自定义事件需要两层的传递
+                        第一层 子组件模板内绑定原生
+                        第二层 子组件处理组件绑定的事件同时向父组件触发自定义事件
+                        父组件才能处理自定义事件
+                        
+            -->
+            <child @click="handleClick"></child>
+
+            <br/>
+            
+            <!-- 
+                不使用以上方式，让自定义组件绑定原生的事件
+                @click.native="handleClick" 使用此方式绑定原生事件
+             -->
+            <child-v2 @click.native="handleClick"></child-v2>
+        </div>
+
+        <script>
+
+            Vue.component('child', {
+                // 在模板内绑定事件才是原生的事件
+                template: '<div @click="handleChildClick">Child</div>',
+                methods: {
+                    handleChildClick: function() {
+                        alert('child click')
+                        // 触发自定义事件
+                        this.$emit('click')
+                    }
+                }
+            })
+
+            Vue.component('childV2', {
+                template: '<div>ChildV2</div>'
+            })
+
+            var vm = new Vue({
+                el: '#root',
+                methods: {
+                    handleClick: function() {
+                        alert('handleClick')
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

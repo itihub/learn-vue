@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Vue 父子组件传值</title>
+        <script src="./vue.js"></script>
+    </head>
+    <body>
+        <!-- 
+            父组件向子组件传值：
+                通过属性方式
+            
+            单向数据流的概念：
+                子组件不能修改父组件传递过来参数，原因如果是引用类型时子组件修改了参数会
+                导致其他依赖父组件传递的引用类型的子组件同时发生修改
+            
+            子组件向父组件传值：
+                通过事件的方式向父组件传值
+         -->
+        <div id="root">
+            <!-- 父组件使用属性方式向counter子组件传递值 使用:可以转成数字，不使用则是字符串 -->
+            <counter :count="0" @inc="handleIncrease"></counter>
+            <counter :count="0" @inc="handleIncrease"></counter>
+            总数：<div>{{total}}</div>
+        </div>
+
+        <script>
+
+            var counter = {
+                // 使用props来接收父组件传递的值
+                props: ['count'],
+                // 由于单向数据流的原因，子组件想要修改父组传递值需要将父组件传递值复制一份作为子组件的数据再做修改
+                data: function() {
+                    return {
+                        number: this.count
+                    }
+                },
+                template: '<div @click="handleClick">{{number}}</div>',
+                methods: {
+                    handleClick: function() {
+                        this.number ++
+                        // 触发一个change事件 同时传出步长1
+                        this.$emit('inc', 1)
+                    }
+                }
+            }
+
+            var vm = new Vue({
+                el: '#root',
+                data: {
+                    total: 0
+                },
+                // 局部组件定义
+                components: {
+                    counter: counter
+                },
+                methods: {
+                    handleIncrease: function(step) {
+                        this.total += step
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>

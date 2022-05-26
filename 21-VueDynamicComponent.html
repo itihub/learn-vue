@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Vue 动态组件与v-once指令</title>
+        <script src="./vue.js"></script>
+    </head>
+
+    <body>
+
+        <div id="root">
+            <!-- 实现通过按钮点击 让child-one和child-two组件交替显示 -->
+            <child-one v-if="type === 'child-one'"></child-one>
+            <child-two v-if="type === 'child-two'"></child-two>
+            <button @click="handleBtnClick">change</button>
+
+            <br/>
+
+            <!-- 
+                通过动态组件实现以上功能 
+                动态组件标签component 使用is来绑定组件名称来控制具体哪个组件展示
+            -->
+            <component :is="type"></component>
+            <button @click="handleBtnClick">change</button>
+
+            <br/>
+
+            <!-- 
+                v-once指令
+                以上切换组件显示都是销毁掉不用的组件再创建新使用的组件 性能不高
+                如果组件每次都一样，组件模板使用v-once指令 会存储到内存 不需要先销毁再创建 
+                使用v-once可以有效的提高静态内容的展示效率
+             -->
+             <component :is="onceType"></component>
+             <button @click="handleBtnOnceClick">change</button>
+
+        </div>
+
+        <script>
+
+            Vue.component('child-one', {
+                template: '<div>child-one</child>'
+            })
+
+            Vue.component('child-two', {
+                template: '<div>child-two</child>'
+            })
+
+            Vue.component('child-one-once', {
+                template: '<div v-once>child-one-once</child>'
+            })
+
+            Vue.component('child-two-once', {
+                template: '<div v-once>child-two-once</child>'
+            })
+
+
+            var vm = new Vue({
+                el: '#root',
+                data: {
+                    type: 'child-one',
+                    onceType: 'child-one-once'
+                },
+                methods: {
+                    handleBtnClick: function() {
+                        this.type = this.type === 'child-one' ? 'child-two' : 'child-one'
+                    },
+                    handleBtnOnceClick: function() {
+                        this.onceType = this.onceType === 'child-one-once' ? 'child-two-once' : 'child-one-once'
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>
