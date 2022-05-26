@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Vue 中使用animate.css库</title>
+        <script src="./vue.js"></script>
+
+        <!-- 引入animate.css -->
+        <link rel="stylesheet" type="text/css" href="./animate.css">
+         
+        <style>
+            /* 放大缩小效果 */
+            @keyframes bounce-in {
+                0% {
+                    transform: scale(0);
+                }
+                50% {
+                    transform: scale(1.5);
+                }
+                100% {
+                    transform: scale(1);
+                }
+            }
+            .fade-enter-active {
+                transform-origin: left center;
+                animation: bounce-in 1s;
+            }
+            .fade-leave-active {
+                transform-origin: left center;
+                animation: bounce-in 1s reverse;
+            }
+        </style> 
+        
+    </head>
+    <body>
+        <div id="root">
+
+            <transition name="fade">
+                <div v-if="show">hello world</div>
+            </transition>
+            <button @click="handleClick">切换</button>
+
+            <br/>
+
+            <!-- 
+                使用animate.css 
+                https://animate.style/
+                使用自定义样式名来指定使用animate css
+                animate 的使用方法 animate__animated 动画名称
+            -->
+            <transition 
+                name="fade"
+                enter-active-class="animate__animated animate__wobble"
+                leave-active-class="animate__animated animate__backOutRight"
+                >
+                <div v-if="show">hello world</div>
+            </transition>
+            <button @click="handleClick">切换</button>
+
+        </div>
+        <script>
+            var vm = new Vue({
+                el: '#root',
+                data: {
+                    show: true
+                },
+                methods: {
+                    handleClick: function() {
+                        this.show = !this.show
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>
