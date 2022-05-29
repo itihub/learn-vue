@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Vue 中的列表过度效果</title>
+        <script src="./vue.js"></script>
+        
+        <style>
+            .v-enter, .v-leave-to {
+                opacity: 0;
+            }
+            .v-enter-active, .v-leave-active {
+                transition: opacity 1s;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div id="root">
+            <!-- 
+                使用transition-group标签包裹列表显示的DOM 为列表添加数据增加过度效果
+                列表显示每增加一个元素就会增加一对div标签，transition-group标签的作为就是
+                为每个div外层加了transition标签
+             -->
+            <transition-group>
+                <div v-for="(item, index) of list" :key="item.id">
+                    {{item.title}}
+                </div>
+            </transition-group>
+            <button @click="handleBtnClick">Add</button>
+        </div>
+
+        <script>
+
+            var count = 0;
+            var vm = new Vue({
+                el: '#root',
+                data: {
+                    list: []
+                },
+                methods: {
+                    handleBtnClick: function() {
+                        this.list.push({
+                            id: count++,
+                            title: 'hello world'
+                        })
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>
